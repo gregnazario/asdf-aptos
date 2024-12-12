@@ -39,8 +39,8 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	os="uname -s"
-	arch="uname -m"
+	os=$(uname -s)
+	arch=$(uname -m)
 	legible_os=os
 
 	if [[ "$os" == "Darwin" ]]; then
