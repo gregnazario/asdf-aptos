@@ -41,6 +41,8 @@ download_release() {
 
   cli_version="${version/^aptos-cli-v//}"
 
+  echo "$cli_version"
+
 	os=$(uname -s)
 	arch=$(uname -m)
 	legible_os=os
