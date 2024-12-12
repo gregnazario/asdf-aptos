@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for aptos.
-GH_REPO="https://github.com/gregnazario/asdf-aptos"
+GH_REPO="https://github.com/aptos-labs/aptos-core"
 TOOL_NAME="aptos"
 TOOL_TEST="aptos --version"
 
@@ -27,11 +26,10 @@ sort_versions() {
 list_github_tags() {
 	git ls-remote --tags --refs "$GH_REPO" |
 		grep -o 'refs/tags/.*' | cut -d/ -f3- |
-		sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+		grep 'aptos-cli' | sed 's/^aptos-cli-v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
 	# Change this function if aptos has other means of determining installable versions.
 	list_github_tags
 }
@@ -41,11 +39,25 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for aptos
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	os="uname -s"
+	arch="uname -m"
+	legible_os=os
 
-	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	if [[ "$os" == "Darwin" ]]; then
+		os="macOS"
+		legible_os="macOS"
+	elif [[ "$os" == "Linux" ]]; then
+		os="Ubuntu-22.04"
+	fi
+
+	# Pre-built
+	pre_built_url="https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v${version}/aptos-cli-${version}-${os}-${arch}.zip"
+	source_url="https://github.com/aptos-labs/aptos-core/archive/refs/tags/aptos-cli-v${version}.zip"
+
+	# Attempt to download prebuilt, then the source, otherwise fail
+	(echo "* Downloading $TOOL_NAME release $version for ${legible_os} ${arch}..." && curl "${curl_opts[@]}" -o "$filename" -C - "$pre_built_url") ||
+		(echo "* Downloading $TOOL_NAME release $version source code..." && curl "${curl_opts[@]}" -o "$filename" -C - "$source_url") ||
+		curl fail "Could not download prebuilt $pre_built_url or source $source_url"
 }
 
 install_version() {
