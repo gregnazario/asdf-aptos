@@ -39,7 +39,7 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-  cli_version="${version/^aptos-cli-v//}"
+  cli_version="${version/aptos-cli-v//}"
 
   echo "$cli_version"
 
