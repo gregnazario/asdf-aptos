@@ -54,6 +54,9 @@ download_release() {
 	pre_built_url="https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v${version}/aptos-cli-${version}-${os}-${arch}.zip"
 	source_url="https://github.com/aptos-labs/aptos-core/archive/refs/tags/aptos-cli-v${version}.zip"
 
+  echo $pre_built_url
+  echo $source_url
+
 	# Attempt to download prebuilt, then the source, otherwise fail
 	(echo "* Downloading $TOOL_NAME release $version for ${legible_os} ${arch}..." && curl "${curl_opts[@]}" -o "$filename" -C - "$pre_built_url") ||
 		(echo "* Downloading $TOOL_NAME release $version source code..." && curl "${curl_opts[@]}" -o "$filename" -C - "$source_url") ||
