@@ -39,6 +39,8 @@ download_release() {
 	version="$1"
 	filename="$2"
 
+  cli_version="${version/^aptos-cli-v//}"
+
 	os=$(uname -s)
 	arch=$(uname -m)
 	legible_os=os
@@ -54,6 +56,7 @@ download_release() {
 	pre_built_url="https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v${version}/aptos-cli-${version}-${os}-${arch}.zip"
 	source_url="https://github.com/aptos-labs/aptos-core/archive/refs/tags/aptos-cli-v${version}.zip"
 
+  url=$source_url
   echo $pre_built_url
   echo $source_url
 
