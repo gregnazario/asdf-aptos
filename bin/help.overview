@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
-cat << 'EOF'
+printf "%s\n" "
 Aptos CLI - The official command line interface for the Aptos blockchain.
 
 The Aptos CLI allows you to:
@@ -13,4 +11,4 @@ The Aptos CLI allows you to:
 - View blockchain data and account information
 
 For more information, visit: https://aptos.dev/en/build/cli
-EOF 
+"

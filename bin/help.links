@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
-cat << 'EOF'
+printf "%s\n" "
 # Aptos CLI Links
 
 ## Official Documentation
@@ -24,4 +22,4 @@ cat << 'EOF'
 - [asdf Plugin Documentation](https://asdf-vm.com/plugins/create.html)
 - [asdf Homepage](https://asdf-vm.com/)
 - [asdf GitHub Repository](https://github.com/asdf-vm/asdf)
-EOF 
+"

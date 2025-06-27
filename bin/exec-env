@@ -3,4 +3,4 @@
 set -euo pipefail
 
 # No special environment preparation needed for Aptos CLI
-# The binary is self-contained and doesn't require additional environment variables 
+# The binary is self-contained and doesn't require additional environment variables

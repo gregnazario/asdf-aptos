@@ -11,4 +11,4 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # Remove the installed version
 rm -rf "$ASDF_INSTALL_PATH"
 
-printf "%s %s uninstallation was successful!\n" "$TOOL_NAME" "$ASDF_INSTALL_VERSION" 
+printf "%s %s uninstallation was successful!\n" "$TOOL_NAME" "$ASDF_INSTALL_VERSION"

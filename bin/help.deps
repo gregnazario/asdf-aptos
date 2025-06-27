@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
-
-cat << 'EOF'
+printf "%s\n" "
 # Aptos CLI Dependencies
 
 ## macOS
@@ -21,4 +19,4 @@ cat << 'EOF'
 - The plugin downloads pre-built binaries, so no compilation is required
 - No Rust toolchain or other build dependencies needed
 - All dependencies are included in the pre-built binaries
-EOF 
+"
