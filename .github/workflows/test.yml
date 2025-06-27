@@ -22,4 +22,5 @@ jobs:
       - name: Test plugin
         uses: asdf-vm/actions/plugin-test@v3
         with:
+          asdf_branch: v0.15.0
           command: "aptos --version" 
