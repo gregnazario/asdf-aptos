@@ -61,8 +61,9 @@ download_release() {
 	echo "* Downloading $TOOL_NAME release $version for ${os} ${arch}..."
 	echo "* URL: $download_url"
 
-	# Download the pre-built binary
-	curl "${curl_opts[@]}" -o "$filename" -C - "$download_url" || fail "Could not download $download_url"
+	# Download the pre-built binary (remove existing file first to avoid prompts)
+	rm -f "$filename"
+	curl "${curl_opts[@]}" -o "$filename" "$download_url" || fail "Could not download $download_url"
 }
 
 install_version() {
@@ -76,18 +77,21 @@ install_version() {
 
 	(
 		mkdir -p "$install_path"
-		
-		# Extract the ZIP file
-		unzip -q "$ASDF_DOWNLOAD_PATH"/*.zip -d "$ASDF_DOWNLOAD_PATH" || fail "Could not extract ZIP file"
-		
+
+		# Find the downloaded file (it's a ZIP file with .tar.gz extension)
+		download_file=$(find "$ASDF_DOWNLOAD_PATH" -maxdepth 1 -name "*.tar.gz" | head -1)
+		[ -n "$download_file" ] || fail "Could not find downloaded file in $ASDF_DOWNLOAD_PATH"
+
+		# Extract the ZIP file (even though it has .tar.gz extension)
+		unzip -q "$download_file" -d "$ASDF_DOWNLOAD_PATH" || fail "Could not extract $download_file"
+		rm -f "$download_file"
+
 		# Find the aptos binary in the extracted files
 		aptos_bin=$(find "$ASDF_DOWNLOAD_PATH" -type f -name aptos | head -1)
-		[ -n "$aptos_bin" ] || fail "Could not find aptos binary after extraction."
-		
+		[ -n "$aptos_bin" ] || fail "Could not find aptos binary after extraction"
+
 		# Copy the aptos executable to the install path
 		cp "$aptos_bin" "$install_path/" || fail "Could not copy aptos executable"
-		
-		# Make the executable executable
 		chmod +x "$install_path/aptos"
 
 		local tool_cmd
