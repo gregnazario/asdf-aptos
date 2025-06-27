@@ -7,7 +7,7 @@ TOOL_NAME="aptos"
 TOOL_TEST="aptos --version"
 
 fail() {
-	echo -e "asdf-$TOOL_NAME: $*"
+	printf "asdf-%s: %s\n" "$TOOL_NAME" "$*"
 	exit 1
 }
 
@@ -57,7 +57,7 @@ list_all_versions() {
 		
 		# Use curl to check if the artifact exists (HEAD request)
 		if curl -fsI "$artifact_url" >/dev/null 2>&1; then
-			echo "$version" >> "$temp_file"
+			printf "%s\n" "$version" >> "$temp_file"
 		fi
 	done
 	
@@ -92,8 +92,8 @@ download_release() {
 	# Construct the download URL for the pre-built binary
 	download_url="https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v${version}/aptos-cli-${version}-${os}-${arch}.zip"
 
-	echo "* Downloading $TOOL_NAME release $version for ${os} ${arch}..."
-	echo "* URL: $download_url"
+	printf "* Downloading %s release %s for %s %s...\n" "$TOOL_NAME" "$version" "${os}" "${arch}"
+	printf "* URL: %s\n" "$download_url"
 
 	# Download the pre-built binary (remove existing file first to avoid prompts)
 	rm -f "$filename"
@@ -129,9 +129,9 @@ install_version() {
 		chmod +x "$install_path/aptos"
 
 		local tool_cmd
-		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
+		tool_cmd="$(printf "%s" "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
-		echo "$TOOL_NAME $version installation was successful!"
+		printf "%s %s installation was successful!\n" "$TOOL_NAME" "$version"
 	) || (
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
