@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cat << 'EOF'
+# Aptos CLI Dependencies
+
+## macOS
+- No additional dependencies required
+- Pre-built binaries are available for macOS (Intel and Apple Silicon)
+
+## Linux
+- No additional dependencies required
+- Pre-built binaries are available for Linux (x86_64 and aarch64)
+
+## Windows
+- Not supported by this plugin
+- Use WSL2 for Windows users
+
+## Notes
+- The plugin downloads pre-built binaries, so no compilation is required
+- No Rust toolchain or other build dependencies needed
+- All dependencies are included in the pre-built binaries
+EOF 

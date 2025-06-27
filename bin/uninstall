@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+current_script_path=${BASH_SOURCE[0]}
+plugin_dir=$(dirname "$(dirname "$current_script_path")")
+
+# shellcheck source=./lib/utils.bash
+. "${plugin_dir}/lib/utils.bash"
+
+# Remove the installed version
+rm -rf "$ASDF_INSTALL_PATH"
+
+printf "%s %s uninstallation was successful!\n" "$TOOL_NAME" "$ASDF_INSTALL_VERSION" 

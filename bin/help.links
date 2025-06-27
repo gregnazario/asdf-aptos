@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cat << 'EOF'
+# Aptos CLI Links
+
+## Official Documentation
+- [Aptos CLI Documentation](https://aptos.dev/en/build/cli)
+- [Aptos Developer Portal](https://aptos.dev/)
+- [Aptos CLI GitHub Repository](https://github.com/aptos-labs/aptos-core)
+
+## Community Resources
+- [Aptos Discord](https://discord.gg/aptos)
+- [Aptos Forum](https://forum.aptos.dev/)
+- [Aptos Blog](https://medium.com/aptoslabs)
+
+## Development Resources
+- [Aptos CLI Releases](https://github.com/aptos-labs/aptos-core/releases)
+- [Aptos Move Language](https://move-language.github.io/move/)
+- [Aptos SDKs](https://aptos.dev/sdks)
+
+## Plugin Resources
+- [asdf Plugin Documentation](https://asdf-vm.com/plugins/create.html)
+- [asdf Homepage](https://asdf-vm.com/)
+- [asdf GitHub Repository](https://github.com/asdf-vm/asdf)
+EOF 

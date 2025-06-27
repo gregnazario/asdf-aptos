@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cat << 'EOF'
+Aptos CLI - The official command line interface for the Aptos blockchain.
+
+The Aptos CLI allows you to:
+- Create and manage Aptos accounts
+- Deploy and interact with smart contracts
+- Submit transactions to the Aptos blockchain
+- Manage local development networks
+- View blockchain data and account information
+
+For more information, visit: https://aptos.dev/en/build/cli
+EOF 
