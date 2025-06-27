@@ -30,8 +30,42 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# Change this function if aptos has other means of determining installable versions.
-	list_github_tags
+	# Get current platform info
+	os=$(uname -s)
+	arch=$(uname -m)
+
+	# Map OS and architecture to Aptos CLI release format
+	if [[ "$os" == "Darwin" ]]; then
+		os="macOS"
+	elif [[ "$os" == "Linux" ]]; then
+		os="Linux"
+	fi
+
+	if [[ "$arch" == "x86_64" ]]; then
+		arch="x86_64"
+	elif [[ "$arch" == "arm64" ]] || [[ "$arch" == "aarch64" ]]; then
+		arch="arm64"
+	fi
+
+	# Get all versions and filter by available artifacts
+	# Use a temporary file to store filtered versions
+	temp_file=$(mktemp)
+	
+	list_github_tags | while read -r version; do
+		# Check if the artifact exists for this platform
+		artifact_url="https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v${version}/aptos-cli-${version}-${os}-${arch}.zip"
+		
+		# Use curl to check if the artifact exists (HEAD request)
+		if curl -fsI "$artifact_url" >/dev/null 2>&1; then
+			echo "$version" >> "$temp_file"
+		fi
+	done
+	
+	# Output the filtered versions
+	if [[ -f "$temp_file" ]]; then
+		cat "$temp_file"
+		rm -f "$temp_file"
+	fi
 }
 
 download_release() {
@@ -102,4 +136,9 @@ install_version() {
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
 	)
+}
+
+list_latest_stable() {
+	# Get the latest version from the filtered list of available versions
+	list_all_versions | sort_versions | tail -n1
 }
