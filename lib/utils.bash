@@ -50,17 +50,17 @@ list_all_versions() {
 	# Get all versions and filter by available artifacts
 	# Use a temporary file to store filtered versions
 	temp_file=$(mktemp)
-	
+
 	list_github_tags | while read -r version; do
 		# Check if the artifact exists for this platform
 		artifact_url="https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v${version}/aptos-cli-${version}-${os}-${arch}.zip"
-		
+
 		# Use curl to check if the artifact exists (HEAD request)
 		if curl -fsI "$artifact_url" >/dev/null 2>&1; then
-			printf "%s\n" "$version" >> "$temp_file"
+			printf "%s\n" "$version" >>"$temp_file"
 		fi
 	done
-	
+
 	# Output the filtered versions
 	if [[ -f "$temp_file" ]]; then
 		cat "$temp_file"
