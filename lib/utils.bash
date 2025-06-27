@@ -26,7 +26,7 @@ sort_versions() {
 list_github_tags() {
 	git ls-remote --tags --refs "$GH_REPO" |
 		grep -o 'refs/tags/.*' | cut -d/ -f3- |
-		grep 'aptos-cli-v' | sed 's/^aptos-cli-v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+		grep '^aptos-cli-v' | sed 's/^aptos-cli-v//'
 }
 
 list_all_versions() {
@@ -35,37 +35,34 @@ list_all_versions() {
 }
 
 download_release() {
-	local version filename url
+	local version filename
 	version="$1"
 	filename="$2"
 
-  cli_version="${version/aptos-cli-v/}"
-
-  echo "$cli_version"
-
 	os=$(uname -s)
 	arch=$(uname -m)
-	legible_os=os
 
+	# Map OS and architecture to Aptos CLI release format
 	if [[ "$os" == "Darwin" ]]; then
 		os="macOS"
-		legible_os="macOS"
 	elif [[ "$os" == "Linux" ]]; then
-		os="Ubuntu-22.04"
+		os="Linux"
 	fi
 
-	# Pre-built
-	pre_built_url="https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v${cli_version}/aptos-cli-${cli_version}-${os}-${arch}.zip"
-	source_url="https://github.com/aptos-labs/aptos-core/archive/refs/tags/aptos-cli-v${cli_version}.zip"
+	if [[ "$arch" == "x86_64" ]]; then
+		arch="x86_64"
+	elif [[ "$arch" == "arm64" ]] || [[ "$arch" == "aarch64" ]]; then
+		arch="arm64"
+	fi
 
-  url=$source_url
-  echo $pre_built_url
-  echo $source_url
+	# Construct the download URL for the pre-built binary
+	download_url="https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v${version}/aptos-cli-${version}-${os}-${arch}.zip"
 
-	# Attempt to download prebuilt, then the source, otherwise fail
-	(echo "* Downloading $TOOL_NAME release $cli_version for ${legible_os} ${arch}..." && curl "${curl_opts[@]}" -o "$filename" -C - "$pre_built_url") ||
-		(echo "* Downloading $TOOL_NAME release $cli_version source code..." && curl "${curl_opts[@]}" -o "$filename" -C - "$source_url") ||
-		curl fail "Could not download prebuilt $pre_built_url or source $source_url"
+	echo "* Downloading $TOOL_NAME release $version for ${os} ${arch}..."
+	echo "* URL: $download_url"
+
+	# Download the pre-built binary
+	curl "${curl_opts[@]}" -o "$filename" -C - "$download_url" || fail "Could not download $download_url"
 }
 
 install_version() {
@@ -79,9 +76,20 @@ install_version() {
 
 	(
 		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		
+		# Extract the ZIP file
+		unzip -q "$ASDF_DOWNLOAD_PATH"/*.zip -d "$ASDF_DOWNLOAD_PATH" || fail "Could not extract ZIP file"
+		
+		# Find the aptos binary in the extracted files
+		aptos_bin=$(find "$ASDF_DOWNLOAD_PATH" -type f -name aptos | head -1)
+		[ -n "$aptos_bin" ] || fail "Could not find aptos binary after extraction."
+		
+		# Copy the aptos executable to the install path
+		cp "$aptos_bin" "$install_path/" || fail "Could not copy aptos executable"
+		
+		# Make the executable executable
+		chmod +x "$install_path/aptos"
 
-		# TODO: Assert aptos executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
