@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    name: Test plugin
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test plugin
+        uses: asdf-vm/actions/plugin-test@v3
+        with:
+          command: "aptos --version"
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install asdf
+        uses: asdf-vm/actions/install@v3
+      
+      - name: Run lint script
+        run: scripts/lint.bash
+
+  actionlint:
+    name: Check workflow files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Check workflow files
+        uses: docker://rhysd/actionlint:1.6.25
+        with:
+          args: -color 
