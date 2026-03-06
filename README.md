@@ -1,7 +1,7 @@
 # asdf-aptos
 
-[![GitHub Actions Status](https://github.com/asdf-vm/asdf-aptos/workflows/Main%20workflow/badge.svg?branch=main)](https://github.com/asdf-vm/asdf-aptos/actions)
-[![GitHub license](https://img.shields.io/github/license/asdf-vm/asdf-aptos.svg)](https://github.com/asdf-vm/asdf-aptos/blob/main/LICENSE)
+[![GitHub Actions Status](https://github.com/gregnazario/asdf-aptos/workflows/Main%20workflow/badge.svg?branch=main)](https://github.com/gregnazario/asdf-aptos/actions)
+[![GitHub license](https://img.shields.io/github/license/gregnazario/asdf-aptos.svg)](https://github.com/gregnazario/asdf-aptos/blob/main/LICENSE)
 
 [Aptos CLI](https://aptos.dev/en/build/cli) plugin for [asdf](https://github.com/asdf-vm/asdf) version manager.
 
@@ -15,18 +15,18 @@
 
 ## Dependencies
 
-- **macOS**: No additional dependencies required
-- **Linux**: No additional dependencies required
+- **macOS**: `unzip` (included with macOS)
+- **Linux**: `unzip` (install via your package manager if not present)
 - **Windows**: Not supported (use WSL2)
 
-The plugin downloads pre-built binaries, so no compilation or Rust toolchain is required.
+The plugin downloads pre-built ZIP binaries, so no compilation or Rust toolchain is required.
 
 ## Install
 
 Plugin:
 
 ```bash
-asdf plugin add aptos https://github.com/asdf-vm/asdf-aptos.git
+asdf plugin add aptos https://github.com/gregnazario/asdf-aptos.git
 ```
 
 Aptos CLI:
@@ -53,7 +53,6 @@ Check [asdf](https://github.com/asdf-vm/asdf) readme for more instructions on ho
 ## Features
 
 - **Platform Detection**: Automatically detects your OS (macOS/Linux) and architecture (x86_64/arm64)
-- **Artifact Filtering**: Only shows versions that have downloadable binaries for your platform
 - **Pre-built Binaries**: Downloads official pre-built binaries (no compilation required)
 - **Latest Version Detection**: Automatically finds the latest stable version
 - **POSIX Compliant**: Follows asdf's banned commands policy for maximum compatibility

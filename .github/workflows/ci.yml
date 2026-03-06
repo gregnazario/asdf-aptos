@@ -23,6 +23,7 @@ jobs:
       - name: Test plugin
         uses: asdf-vm/actions/plugin-test@v3
         with:
+          asdf_branch: v0.15.0
           command: "aptos --version"
 
   lint:
@@ -31,6 +32,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
       
       - name: Install asdf
         uses: asdf-vm/actions/install@v3

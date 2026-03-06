@@ -4,19 +4,16 @@ printf "%s\n" "
 # Aptos CLI Dependencies
 
 ## macOS
-- No additional dependencies required
-- Pre-built binaries are available for macOS (Intel and Apple Silicon)
+- unzip (included with macOS)
 
 ## Linux
-- No additional dependencies required
-- Pre-built binaries are available for Linux (x86_64 and aarch64)
+- unzip (install via your package manager if not present)
 
 ## Windows
 - Not supported by this plugin
 - Use WSL2 for Windows users
 
 ## Notes
-- The plugin downloads pre-built binaries, so no compilation is required
+- The plugin downloads pre-built ZIP binaries and extracts them with unzip
 - No Rust toolchain or other build dependencies needed
-- All dependencies are included in the pre-built binaries
 "
